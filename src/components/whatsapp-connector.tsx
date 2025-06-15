@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
@@ -8,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, CheckCircle, XCircle, QrCode, LogOut, RefreshCw } from 'lucide-react';
 import type { ConnectionStatus } from '@/types';
+import { WhatsAppLogo } from "@/components/icons/whatsapp-logo";
 
 // Simulating whatsapp-web.js client events and states
 // In a real app, this logic would be driven by events from a backend whatsapp-web.js instance.

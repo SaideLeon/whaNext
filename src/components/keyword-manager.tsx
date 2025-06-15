@@ -115,7 +115,8 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
                   <FormLabel className="font-semibold">Keyword</FormLabel>
                   <FormControl>
                     <Input placeholder="e.g., price, hours, info" {...field} className="bg-background" />
-                  </FormControl                  <FormMessage />>
+                  </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
