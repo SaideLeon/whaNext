@@ -25,7 +25,7 @@ export function WhatsAppConnector({ onMessage, onReady }: { onMessage?: (message
       const url = await QRCode.toDataURL(data, { width: 256, margin: 2 });
       setQrCodeUrl(url);
       setStatus('qr');
-      setStatusMessage('Scan the QR code with your WhatsApp app.');
+      setStatusMessage('Displaying simulated QR code. This is for demo purposes and is not scannable.');
     } catch (err) {
       console.error('Failed to generate QR code', err);
       setStatus('error');
@@ -133,7 +133,7 @@ export function WhatsAppConnector({ onMessage, onReady }: { onMessage?: (message
 
         {status === 'qr' && qrCodeUrl && (
           <div className="flex flex-col items-center p-4 border rounded-md bg-muted/20 shadow-inner">
-            <p className="mb-2 text-center text-sm">Scan this QR code with WhatsApp on your phone.</p>
+            <p className="mb-2 text-center text-sm">This is a simulated QR code for demonstration. Scanning will not connect to WhatsApp.</p>
             <Image src={qrCodeUrl} alt="WhatsApp QR Code" width={256} height={256} className="rounded-md border shadow-md" data-ai-hint="qr code" />
           </div>
         )}
