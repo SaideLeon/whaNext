@@ -35,68 +35,68 @@ export function AppDashboard() {
 
   const handleAiReplyToggle = useCallback((enabled: boolean) => {
     setIsAiReplyEnabled(enabled);
-    addMessageToLog(`AI Smart Replies ${enabled ? 'enabled' : 'disabled'}.`, 'info');
+    addMessageToLog(`Respostas Inteligentes com IA ${enabled ? 'ativadas' : 'desativadas'}.`, 'info');
   }, [addMessageToLog]);
 
   const handleWhatsAppReady = useCallback((isReady: boolean) => {
     setIsWhatsAppReady(isReady);
-    addMessageToLog(isReady ? 'WhatsApp connection established.' : 'WhatsApp disconnected.', 'info');
+    addMessageToLog(isReady ? 'Conexão com WhatsApp estabelecida.' : 'WhatsApp desconectado.', 'info');
   }, [addMessageToLog]);
 
   const processIncomingMessage = useCallback(async (messageText: string) => {
     if (!isWhatsAppReady) {
-      toast({ title: "WhatsApp Not Ready", description: "Cannot process message, WhatsApp is not connected.", variant: "destructive" });
+      toast({ title: "WhatsApp Não Está Pronto", description: "Não é possível processar a mensagem, o WhatsApp não está conectado.", variant: "destructive" });
       return;
     }
 
-    addMessageToLog(`Received: "${messageText}"`, 'incoming');
+    addMessageToLog(`Recebido: "${messageText}"`, 'incoming');
 
-    // 1. Try keyword-based reply
+    // 1. Tentar resposta baseada em palavra-chave
     if (keywordRules.length > 0) {
       const keywords = keywordRules.map(r => r.keyword);
       const replies = keywordRules.map(r => r.reply);
       try {
         const keywordReplyResult = await callGenerateKeywordReplies({ message: messageText, keywords, replies });
         if (keywordReplyResult.reply) {
-          addMessageToLog(`Auto-replying (keyword): "${keywordReplyResult.reply}"`, 'outgoing');
-          // Here you would actually send the message via whatsapp-web.js
+          addMessageToLog(`Respondendo automaticamente (palavra-chave): "${keywordReplyResult.reply}"`, 'outgoing');
+          // Aqui você realmente enviaria a mensagem via whatsapp-web.js
           return; 
         }
       } catch (error) {
-        console.error("Error with keyword reply AI:", error);
-        toast({ title: "Keyword AI Error", description: "Could not process keyword-based reply.", variant: "destructive" });
+        console.error("Erro com IA de resposta por palavra-chave:", error);
+        toast({ title: "Erro na IA de Palavras-chave", description: "Não foi possível processar a resposta baseada em palavras-chave.", variant: "destructive" });
       }
     }
 
-    // 2. If no keyword match and AI smart replies are enabled
+    // 2. Se nenhuma palavra-chave corresponder e as respostas inteligentes com IA estiverem ativadas
     if (isAiReplyEnabled) {
-      addMessageToLog('No keyword match. Attempting AI smart reply...', 'info');
+      addMessageToLog('Nenhuma palavra-chave correspondente. Tentando resposta inteligente com IA...', 'info');
       try {
         const smartReplyResult = await callGenerateSmartReply({ message: messageText });
         if (smartReplyResult.reply) {
-          addMessageToLog(`Auto-replying (AI): "${smartReplyResult.reply}"`, 'outgoing');
-          // Here you would actually send the message via whatsapp-web.js
+          addMessageToLog(`Respondendo automaticamente (IA): "${smartReplyResult.reply}"`, 'outgoing');
+          // Aqui você realmente enviaria a mensagem via whatsapp-web.js
         } else {
-          addMessageToLog('AI could not generate a smart reply.', 'info');
+          addMessageToLog('A IA não conseguiu gerar uma resposta inteligente.', 'info');
         }
       } catch (error) {
-        console.error("Error with smart reply AI:", error);
-        toast({ title: "Smart Reply AI Error", description: "Could not generate smart reply.", variant: "destructive" });
-         addMessageToLog('Error generating AI smart reply.', 'info');
+        console.error("Erro com IA de resposta inteligente:", error);
+        toast({ title: "Erro na IA de Resposta Inteligente", description: "Não foi possível gerar uma resposta inteligente.", variant: "destructive" });
+         addMessageToLog('Erro ao gerar resposta inteligente com IA.', 'info');
       }
     } else {
        if (!keywordRules.some(rule => messageText.toLowerCase().includes(rule.keyword.toLowerCase()))) {
-         addMessageToLog('No keyword match and AI replies are disabled. No reply sent.', 'info');
+         addMessageToLog('Nenhuma palavra-chave correspondente e respostas com IA desativadas. Nenhuma resposta enviada.', 'info');
        }
     }
   }, [keywordRules, isAiReplyEnabled, isWhatsAppReady, toast, addMessageToLog]);
   
-  // Simulate an incoming message for testing purposes
+  // Simular uma mensagem recebida para fins de teste
   useEffect(() => {
     if (isWhatsAppReady) {
       const testMessageTimer = setTimeout(() => {
         // processIncomingMessage("Can you tell me the price?");
-      }, 5000); // Simulate a message 5 seconds after connection
+      }, 5000); // Simular uma mensagem 5 segundos após a conexão
       return () => clearTimeout(testMessageTimer);
     }
   }, [isWhatsAppReady, processIncomingMessage]);
@@ -111,13 +111,13 @@ export function AppDashboard() {
       <Card className="shadow-lg">
         <CardHeader>
           <CardTitle className="flex items-center text-2xl font-headline">
-            Message Log
+            Registro de Mensagens
           </CardTitle>
         </CardHeader>
         <CardContent>
           <ScrollArea className="h-[200px] w-full rounded-md border p-4 bg-muted/20 shadow-inner">
             {messageLog.length === 0 ? (
-              <p className="text-muted-foreground text-center">No messages yet.</p>
+              <p className="text-muted-foreground text-center">Nenhuma mensagem ainda.</p>
             ) : (
               messageLog.map(msg => (
                 <div key={msg.id} className={`mb-2 p-2 rounded-md text-sm ${
@@ -129,7 +129,7 @@ export function AppDashboard() {
                     {msg.type === 'incoming' && <Inbox className="w-4 h-4 mr-2 text-blue-600 dark:text-blue-400" />}
                     {msg.type === 'outgoing' && <Send className="w-4 h-4 mr-2 text-green-600 dark:text-green-400 ml-auto order-2" />}
                     <span className={`font-medium ${msg.type === 'outgoing' ? 'order-1' : ''}`}>
-                      {msg.type === 'incoming' ? 'Received' : msg.type === 'outgoing' ? 'Sent' : 'System'}
+                      {msg.type === 'incoming' ? 'Recebida' : msg.type === 'outgoing' ? 'Enviada' : 'Sistema'}
                     </span>
                   </div>
                   <p className={`${msg.type === 'outgoing' ? '' : ''}`}>{msg.text}</p>

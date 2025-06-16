@@ -18,13 +18,13 @@ export default function HomePage() {
           <SidebarTrigger className="group-data-[collapsible=icon]:hidden mr-1" />
         </SidebarHeader>
         <SidebarContent className="p-2">
-          {/* Future navigation items can go here */}
-          {/* Example:
+          {/* Itens de navegação futuros podem ir aqui */}
+          {/* Exemplo:
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton isActive tooltip="Dashboard">
+              <SidebarMenuButton isActive tooltip="Painel">
                 <Home />
-                <span>Dashboard</span>
+                <span>Painel</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -33,14 +33,14 @@ export default function HomePage() {
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-10 flex h-14 items-center gap-4 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6 justify-between md:justify-end">
-          {/* Mobile sidebar trigger */}
+          {/* Gatilho da barra lateral móvel */}
           <div className="md:hidden">
             <SidebarTrigger />
           </div>
           <h1 className="font-headline text-lg font-semibold md:hidden">
-            WhatsApp Autoreply
+            Respostas Automáticas WhatsApp
           </h1>
-          {/* User/settings dropdown can go here */}
+          {/* Menu suspenso de usuário/configurações pode ir aqui */}
         </header>
         <main className="flex-1">
           <AppDashboard />

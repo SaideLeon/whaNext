@@ -16,8 +16,8 @@ import { PlusCircle, Trash2, MessageSquareText, Settings2 } from 'lucide-react';
 import type { KeywordRule } from '@/types';
 
 const keywordRuleSchema = z.object({
-  keyword: z.string().min(1, "Keyword cannot be empty.").max(50, "Keyword too long."),
-  reply: z.string().min(1, "Reply cannot be empty.").max(500, "Reply too long."),
+  keyword: z.string().min(1, "A palavra-chave não pode estar vazia.").max(50, "Palavra-chave muito longa."),
+  reply: z.string().min(1, "A resposta não pode estar vazia.").max(500, "Resposta muito longa."),
 });
 
 type KeywordRuleFormData = z.infer<typeof keywordRuleSchema>;
@@ -44,19 +44,19 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
     if (storedRules) {
       try {
         const parsedRules = JSON.parse(storedRules) as KeywordRule[];
-        // Ensure createdAt is a Date object
         const validatedRules = parsedRules.map(rule => ({...rule, createdAt: new Date(rule.createdAt)}));
         setRules(validatedRules);
         onRulesChange(validatedRules);
       } catch (error) {
-        console.error("Failed to parse stored keyword rules:", error);
-        localStorage.removeItem('whatsappAutoreplyKeywordRules'); // Clear corrupted data
+        console.error("Falha ao analisar as regras de palavras-chave armazenadas:", error);
+        localStorage.removeItem('whatsappAutoreplyKeywordRules'); 
       }
     } else if (initialRules.length > 0) {
-       setRules(initialRules); // Use initial rules if no stored rules
+       setRules(initialRules); 
        onRulesChange(initialRules);
     }
-  }, []); // Removed onRulesChange and initialRules from dependencies to avoid loops/ re-initialization issues.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
 
   useEffect(() => {
     localStorage.setItem('whatsappAutoreplyKeywordRules', JSON.stringify(rules));
@@ -72,8 +72,8 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
     };
     if (rules.some(rule => rule.keyword === newRule.keyword)) {
       toast({
-        title: "Error",
-        description: "This keyword already exists.",
+        title: "Erro",
+        description: "Esta palavra-chave já existe.",
         variant: "destructive",
       });
       return;
@@ -81,8 +81,8 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
     setRules(prevRules => [newRule, ...prevRules]);
     form.reset();
     toast({
-      title: "Success",
-      description: "Keyword rule added.",
+      title: "Sucesso",
+      description: "Regra de palavra-chave adicionada.",
       className: "bg-primary text-primary-foreground",
     });
   };
@@ -90,8 +90,8 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
   const deleteRule = (id: string) => {
     setRules(prevRules => prevRules.filter(rule => rule.id !== id));
     toast({
-      title: "Rule Deleted",
-      description: "The keyword rule has been removed.",
+      title: "Regra Excluída",
+      description: "A regra de palavra-chave foi removida.",
     });
   };
 
@@ -100,9 +100,9 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
       <CardHeader>
         <CardTitle className="flex items-center text-2xl font-headline">
           <Settings2 className="w-7 h-7 mr-2 text-primary" />
-          Keyword Auto-Replies
+          Respostas Automáticas por Palavra-chave
         </CardTitle>
-        <CardDescription>Define keywords and their corresponding automatic replies.</CardDescription>
+        <CardDescription>Defina palavras-chave e suas respostas automáticas correspondentes.</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -112,9 +112,9 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
               name="keyword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Keyword</FormLabel>
+                  <FormLabel className="font-semibold">Palavra-chave</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., price, hours, info" {...field} className="bg-background" />
+                    <Input placeholder="ex: preço, horário, informações" {...field} className="bg-background" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -125,16 +125,16 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
               name="reply"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="font-semibold">Automatic Reply</FormLabel>
+                  <FormLabel className="font-semibold">Resposta Automática</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="e.g., Our price list can be found at..." {...field} className="bg-background min-h-[80px]" />
+                    <Textarea placeholder="ex: Nossa lista de preços pode ser encontrada em..." {...field} className="bg-background min-h-[80px]" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full sm:w-auto" aria-label="Add Keyword Rule">
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Rule
+            <Button type="submit" className="w-full sm:w-auto" aria-label="Adicionar Regra de Palavra-chave">
+              <PlusCircle className="mr-2 h-4 w-4" /> Adicionar Regra
             </Button>
           </form>
         </Form>
@@ -143,10 +143,10 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
 
         <h3 className="text-lg font-semibold mb-4 flex items-center">
           <MessageSquareText className="w-5 h-5 mr-2 text-primary" />
-          Current Rules ({rules.length})
+          Regras Atuais ({rules.length})
         </h3>
         {rules.length === 0 ? (
-          <p className="text-muted-foreground text-center py-4">No keyword rules defined yet.</p>
+          <p className="text-muted-foreground text-center py-4">Nenhuma regra de palavra-chave definida ainda.</p>
         ) : (
           <ScrollArea className="h-[300px] pr-3">
             <div className="space-y-4">
@@ -154,16 +154,16 @@ export function KeywordManager({ onRulesChange, initialRules = [] }: KeywordMana
                 <div key={rule.id} className="p-4 border rounded-md bg-card shadow hover:shadow-md transition-shadow duration-200 group">
                   <div className="flex justify-between items-start">
                     <div>
-                      <p className="font-semibold text-primary break-all">Keyword: <span className="font-normal text-foreground">{rule.keyword}</span></p>
-                      <p className="text-sm text-muted-foreground mt-1 break-all">Reply: <span className="text-foreground">{rule.reply}</span></p>
-                      <p className="text-xs text-muted-foreground mt-2">Added: {rule.createdAt.toLocaleDateString()}</p>
+                      <p className="font-semibold text-primary break-all">Palavra-chave: <span className="font-normal text-foreground">{rule.keyword}</span></p>
+                      <p className="text-sm text-muted-foreground mt-1 break-all">Resposta: <span className="text-foreground">{rule.reply}</span></p>
+                      <p className="text-xs text-muted-foreground mt-2">Adicionada em: {rule.createdAt.toLocaleDateString()}</p>
                     </div>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={() => deleteRule(rule.id)}
                       className="text-muted-foreground hover:text-destructive opacity-50 group-hover:opacity-100 transition-opacity"
-                      aria-label={`Delete rule for keyword ${rule.keyword}`}
+                      aria-label={`Excluir regra para a palavra-chave ${rule.keyword}`}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
